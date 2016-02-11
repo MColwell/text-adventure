@@ -27,6 +27,7 @@ class item {
 class location {
   std::string location_name;
   std::vector<item> location_inventory;
+  std::string description;
   public:
     void set_location_name(std::string loc_name) {
       location_name = loc_name;
@@ -39,6 +40,12 @@ class location {
     }
     std::vector<item> get_location_inventory() {
       return location_inventory;
+    }
+    void set_description(std::string desc) {
+      description = desc;
+    }
+    std::string get_description(std::string desc) {
+      return description;
     }
 };
 
@@ -179,7 +186,7 @@ bool parsecommand(std::string command, player fred) {
   }
   if (first_command == "look" || first_command == "inspect" || first_command == "examine") {
     if (the_rest == "here" || the_rest == "around" || the_rest == "") {
-      std::cout << (fred.get_location())->get_location_name() << std::endl;
+      std::cout << (fred.get_location())->get_description() << std::endl;
       return true;
     }
   }
@@ -191,10 +198,7 @@ bool parsecommand(std::string command, player fred) {
   return true;
 }
 
-int main () {
-  std::cout << "You are in a tavern." << std::endl;
-  std::cout << "Type what you will." << std::endl;
-  player fred;
+void setup(player fred) {
   fred.newplayer();
   item coaster;
   coaster.set_item_name("Coaster");
@@ -202,9 +206,17 @@ int main () {
   location* tavern = new location;
   tavern->set_location_name("Ye Olde Tavern");
   tavern->add_item(coaster);
+  fred.set_location(tavern);
+  tavern->description = "The tavern is nearly empty. There is a coaster on the bar.";
+}
+
+int main () {
+  std::cout << "You are in a tavern." << std::endl;
+  std::cout << "Type what you will." << std::endl;
+  player fred;
+  setup(fred);
   //world earth;
   //earth.location_list.push_back(tavern);
-  fred.set_location(tavern);
   std::string command = "nothing";
   bool keepgoing = true;
   while (keepgoing) {
